@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+@using Unit16Work.Models
+@model WorkReader
+<h2>设置工作流</h2>
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>@Html.DropDownListFor(x => x.WorkType, ViewBag.types as SelectList)</td>
+        </tr>
+        <tr>
+            <td>@Html.RadioButtonFor(x => x.WorkDay, true, new { @checked = true })<span>1天以下</span></td>
+            <td>@Html.RadioButtonFor(x => x.WorkDay, false)<span>2天以下</span></td>
+            <td>@Html.RadioButtonFor(x => x.WorkDay, false)<span>3天以下</span></td>
+            <td>@Html.RadioButtonFor(x => x.WorkDay, false)<span>3天以上</span></td>
+        </tr>
+        <tr>
+            <td><input id="Radio1" value="one" name="qq" type="radio" checked="checked" />一级审核</td>
+            <td><input id="Radio2" value="two" name="qq" type="radio" />二级审核</td>
+            <td><input id="Radio3" value="three" name="qq" type="radio" />三级审核</td>
+        </tr>
+        <tr>
+            <td>
+                <select id="Select1"></select>              
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select id="Select2"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select id="Select3"></select>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="Submit1" type="submit" value="保存工作流程" /></td>
+        </tr>
+    </table>
+}
+<script>
+    one(); two(); three();
+    $(function () {
+        var zz = $("input[name='qq']:checked").val();
+        if (zz =="one") {
+            $("#Select1").show();
+            $("#Select2").hide();
+            $("#Select3").hide();
+        }
+        if (zz == "two") {
+            $("#Select1").show();
+            $("#Select2").show();
+            $("#Select3").hide();
+        }
+        if (zz == "three") {
+            $("#Select1").show();
+            $("#Select2").show();
+            $("#Select3").show();
+        }
+
+        $("#Radio1").click(function () {
+            $("#Select1").show();
+            $("#Select2").hide();
+            $("#Select3").hide();
+        })
+        $("#Radio2").click(function () {
+            $("#Select1").show();
+            $("#Select2").show();
+            $("#Select3").hide();
+        })
+        $("#Radio3").click(function () {
+            $("#Select1").show();
+            $("#Select2").show();
+            $("#Select3").show();
+        })
+    })
+
+    function one() {
+        $.ajax({
+            url: '/Work/GetOne',
+            type: 'get',
+            dataType:'json',
+            success: function (d) {
+                $("#Select1").empty();
+                $(d).each(function () {
+                    var opt = "<option value='" + this.Id + "'>" + this.Name + "</option>";
+                    $("#Select1").append(opt);
+                })
+                
+            }
+        })
+    }
+    function two() {
+        $.ajax({
+            url: '/Work/GetTwo',
+            type: 'get',
+            dataType: 'json',
+            success: function (d) {
+                $("#Select2").empty();
+                $(d).each(function () {
+                    var opt = "<option value='" + this.Id + "'>" + this.Name + "</option>";
+                    $("#Select2").append(opt);
+                })
+
+            }
+        })
+    }
+    function three() {
+        $.ajax({
+            url: '/Work/GetThree',
+            type: 'get',
+            dataType: 'json',
+            success: function (d) {
+                $("#Select3").empty();
+                $(d).each(function () {
+                    var opt = "<option value='" + this.Id + "'>" + this.Name + "</option>";
+                    $("#Select3").append(opt);
+                })
+
+            }
+        })
+    }
+
+</script>
+
+
+
